@@ -1,0 +1,14 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="./css/main.css">
+        <script src="./javascript/getjson.js"></script>
+        <title>ISBM Serch Web API</title>
+    </head>
+    <body>
+        <div>ISBN検索をする</div>
+        <input type="text" name="serch" id="keyword" onkeyup="getJSON(`output`,false)">
+        <input type="button" value="serch" onclick="getJSON(`output`,true)">
+        <hr>
+        <div id="output"></div>
+    </body>
+</html>

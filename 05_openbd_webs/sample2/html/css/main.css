@@ -1,0 +1,13 @@
+.table{
+	display: table;
+    width: 100%;
+}
+
+.tableCell, .tableHead {
+	border: 1px solid #999999;
+	display: table-cell;
+	padding: 3px 10px;
+}
+.tableRow {
+	display: table-row;
+}
