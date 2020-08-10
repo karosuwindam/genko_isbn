@@ -63,18 +63,22 @@ func newserchisbn(isbn string, no int) []SqlBookData {
 	return tmp
 }
 func view(table string) string {
+	var err error
+	var tmp []byte
 	if table == "" {
+		tmp, err = json.Marshal(bookdatatable.Scansql())
 
+	} else {
+		tmp, err = json.Marshal(bookdatatable.ScansqlId(table))
 	}
-	tmp, err := json.Marshal(bookdatatable.Scansql())
 	if err != nil {
 		log.Fatal(err)
 		return ""
 	}
 	return string(tmp)
-
 }
-func apiSql(url []string) (string, error) {
+
+func apiSql(url []string, r *http.Request) (string, error) {
 	var output string
 	if len(url) > 3 {
 		switch url[2] {
@@ -98,7 +102,7 @@ func apiserver(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "Err API request")
 		case "sql":
 			start := time.Now()
-			jsondata, err := apiSql(urldata)
+			jsondata, err := apiSql(urldata, r)
 			end := time.Now()
 			if err != nil {
 				w.WriteHeader(400)

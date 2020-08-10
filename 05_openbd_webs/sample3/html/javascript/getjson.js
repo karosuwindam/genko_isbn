@@ -1,4 +1,5 @@
 var keyword_back
+
 function getJSON(output,flag){
     var req = new XMLHttpRequest();
     var keyword = document.getElementById("keyword").value

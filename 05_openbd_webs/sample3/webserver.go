@@ -30,6 +30,10 @@ const (
 	CONFIG_PATH  = "./config"
 	CONFIG_FILE  = "websetup.json"
 )
+const (
+	basicAuthUser     = "admin"
+	basicAuthPassword = "admin"
+)
 
 func (t *WebSetupData) websetup() error {
 	config_json := CONFIG_PATH + "/" + CONFIG_FILE
@@ -107,6 +111,7 @@ func (t *WebSetupData) webstart() {
 	}
 	fmt.Println(t.Data.Ip + ":" + t.Data.Port + "server start")
 	http.HandleFunc("/v1/", apiserver)
+	http.HandleFunc("/sql/", sqlapiserver)
 	http.HandleFunc("/", t.viewhtml)
 	http.ListenAndServe(t.Data.Ip+":"+t.Data.Port, nil)
 }
