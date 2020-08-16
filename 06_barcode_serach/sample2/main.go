@@ -3,12 +3,14 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	// _ "github.com/mattn/go-sqlite3"
 )
 
 type DbsetupData struct {
@@ -18,19 +20,30 @@ type DbsetupData struct {
 	Ipaddr     string `json:host`
 	Port       string `json:port`
 	Databs     string `json:database`
+	DbPath     string `json:dbpath`
 }
 
-const dbtype = "mysql"
-const dbuser = "bookserver"
-const dbpassword = "bookserver"
-const conecttype = "tcp"
-const ipaddr = "mysql_host"
-const port = "3306"
-const databs = "isbn_bookbase"
+const ( //環境変数による設定読み込み
+	envSqlType     = "APP_SQL_TYPE"
+	envSqlUser     = "APP_SQL_USER"
+	envSqlPass     = "APP_SQL_PASS"
+	envSqlHost     = "APP_SQL_HOST"
+	envSqlPort     = "APP_SQL_PORT"
+	envSqlDatabase = "APP_SQL_DATABASE"
+	envSqlDbPath   = "APP_SQL_PATH"
+)
+const ( //初期化時の設定値
+	dbtype     = "mysql"
+	dbuser     = "bookserver"
+	dbpassword = "bookserver"
+	conecttype = "tcp"
+	ipaddr     = "mysql_host"
+	port       = "3306"
+	databs     = "isbn_bookbase"
+	Dbpath     = "./test.db"
+)
 
 var bookdatatable BookData
-
-// var userstable UserData
 
 func dbsetup() DbsetupData {
 	var tmp = DbsetupData{}
@@ -45,6 +58,7 @@ func dbsetup() DbsetupData {
 		tmp.Ipaddr = ipaddr
 		tmp.Port = port
 		tmp.Databs = databs
+		tmp.DbPath = Dbpath
 		fp, err := os.Create(config_json)
 		if err != nil {
 			panic(err)
@@ -79,32 +93,57 @@ func dbsetup() DbsetupData {
 		if fc.Databs == "" {
 			fc.Databs = databs
 		}
-		// fmt.Println(fc)
+		if fc.DbPath == "" {
+			fc.DbPath = Dbpath
+		}
 		tmp = fc
 
+	}
+	if str := os.Getenv(envSqlType); str != "" {
+		tmp.Dbtype = str
+	}
+	if str := os.Getenv(envSqlHost); str != "" {
+		tmp.Ipaddr = str
+	}
+	if str := os.Getenv(envSqlDatabase); str != "" {
+		tmp.Databs = str
+	}
+	if str := os.Getenv(envSqlUser); str != "" {
+		tmp.Dbuser = str
+	}
+	if str := os.Getenv(envSqlPass); str != "" {
+		tmp.Dbpassword = str
+	}
+	if str := os.Getenv(envSqlPort); str != "" {
+		tmp.Port = str
+	}
+	if str := os.Getenv(envSqlDbPath); str != "" {
+		tmp.DbPath = str
 	}
 
 	return tmp
 }
 
-var sqltype string
-
 func main() {
 	var web WebSetupData
 	dbdata := dbsetup()
 	var err error
+	bookdatatable.sqltype = dbdata.Dbtype
+	switch bookdatatable.sqltype {
+	case "mysql":
+		err = bookdatatable.bookdatas_sql.SqlSetup(dbdata.Dbtype, dbdata.Dbuser, dbdata.Dbpassword, conecttype, dbdata.Ipaddr, dbdata.Port, dbdata.Databs)
+	case "sqlite3":
+		err = bookdatatable.bookdatas_sql.SqlSetup(dbdata.Dbtype, dbdata.DbPath)
+	default:
+		str := "SQL Type" + bookdatatable.sqltype + "is not"
+		err = errors.New(str)
+	}
 
-	err = bookdatatable.bookdatas_sql.SqlSetup(dbdata.Dbtype, dbdata.Dbuser, dbdata.Dbpassword, conecttype, dbdata.Ipaddr, dbdata.Port, dbdata.Databs)
-	// sqltype = dbdata.Dbtype
-	// sqltype = "sqlite3"
-	// err = blogstable.blogs_sql.SqlSetup(sqltype, "./test.db")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 	defer bookdatatable.bookdatas_sql.CloseDB()
-
-	// userstable.users_sql = blogstable.blogs_sql
 
 	bookdatatable.Sqlsetup("bookdatabase")
 

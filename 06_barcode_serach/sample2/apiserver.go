@@ -42,6 +42,7 @@ func newserchisbn(isbn string, no int) []SqlBookData {
 	}
 	data := searchapi.GetOpenBdData(isbn)
 	if data.Title == "" || data.Image == "" {
+		fmt.Println("OpenBD not serch data")
 		<-ch1
 		if data.Title == "" {
 			data.Title = adata.Title

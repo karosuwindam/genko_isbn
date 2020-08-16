@@ -116,6 +116,7 @@ func (t *SqlConfig) openDBMySql(table string) (*sql.DB, error) {
 	if !t.setupflag {
 		return nil, errors.New("not run setup")
 	}
+	fmt.Println("OpenDB : " + t.dataSourceName + table + "?parseTime=true")
 	db, err := sql.Open("mysql", t.dataSourceName+table+"?parseTime=true")
 	if err != nil {
 		fmt.Println(err.Error())

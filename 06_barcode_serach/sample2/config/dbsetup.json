@@ -2,7 +2,8 @@
   "Dbtype": "mysql",
   "Dbuser": "bookserver",
   "Dbpassword": "bookserver",
-  "Ipaddr": "localhost",
+  "Ipaddr": "karosu-main",
   "Port": "3306",
-  "Databs": "isbn_bookbase"
+  "Databs": "isbn_bookbase",
+  "DbPath": "./test.db"
 }

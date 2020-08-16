@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>read ISBN Ber code</title>
+        <link rel="stylesheet" href="./css/main.css">
+        <script>
+            function cleardata(){
+                document.getElementById("keyword").value = "";
+                document.getElementById("output").innerHTML="";
+            }
+            function stopbttton(data){
+                
+                if (camch(data)){
+                    // document.getElementById("interactive").style.display = ""
+                }else{
+                    // document.getElementById("interactive").style.display = "none"
+                }
+            }
+            function output(str,code){
+                document.getElementById(str).innerHTML = "<p>"+code+"</p>" + document.getElementById(str).innerHTML
+
+            }
+        </script>
+    </head>
+    <body>
+        <div>ISBN検索をする</div>
+        <input type="button" value="stop" onclick="stopbttton(this)" style="width: 300px;height: 30px;"><br>
+        <input type="text" name="serch" id="keyword" onkeyup="output(`output`,this.value)">
+        <input type="button" value="clear" onclick="cleardata()" style="height: 30px;">
+        <hr>
+        <div id="output"></div>
+        <div id="interactive" class="viewport"></div>
+    </body>
+    <script src="./dist/quagga.js"></script>
+    <script src="./vendor/jquery-1.9.0.min.js" type="text/javascript"></script>
+    <script src="//webrtc.github.io/adapter/adapter-latest.js" type="text/javascript"></script>
+    <script src="./javascript/bsserch.js"></script>
+</html>

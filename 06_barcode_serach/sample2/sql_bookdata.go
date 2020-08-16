@@ -25,6 +25,7 @@ type SqlBookData struct {
 
 type BookData struct {
 	bookdatas_sql sqldata.SqlConfig
+	sqltype       string
 	Column_name   []string
 }
 
@@ -33,7 +34,7 @@ func (t *BookData) Sqlsetup(TName string) {
 	tableName := TName
 	column_type := []string{}
 	column_name := []string{"isbn", "title", "writer", "brand", "ext", "synopsis", "image"}
-	if sqltype == "sqlite3" {
+	if t.sqltype == "sqlite3" {
 		column_type = []string{"varchar", "varchar", "varchar", "varchar", "varchar", "varchar", "varchar"}
 	} else {
 		column_type = []string{"varchar(14)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(2048)", "varchar(255)"}
@@ -48,7 +49,7 @@ func (t *BookData) scandata(row *sql.Rows) (SqlBookData, error) {
 	var cat, uat string
 	var err error
 	layout := "2006-01-02 15:04:05"
-	if sqltype == "sqlite3" {
+	if t.sqltype == "sqlite3" {
 		//"isbn", "title","writer","brand","ext","synopsis","image"
 		err = row.Scan(&tmp.Id, &tmp.Isbn, &tmp.Title, &tmp.Writer, &tmp.Brand, &tmp.Ext, &tmp.Synopsis, &tmp.Image, &cat, &uat)
 		if err == nil {
