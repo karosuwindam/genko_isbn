@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//SQLの設定ファイル
 type SqlConfig struct {
 	dataSourceName string
 	dbname         string
@@ -116,6 +117,7 @@ func (t *SqlConfig) openDBMySql(table string) (*sql.DB, error) {
 	if !t.setupflag {
 		return nil, errors.New("not run setup")
 	}
+	fmt.Println("OpenDB : " + t.dataSourceName + table + "?parseTime=true")
 	db, err := sql.Open("mysql", t.dataSourceName+table+"?parseTime=true")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -239,7 +241,6 @@ func (t *SqlConfig) AddDB(v ...interface{}) int {
 	}
 	time_now := time.Now()
 	cmd := "insert into " + t.tableName + "("
-	// cmd := "insert into " + "blogs" + "("
 	for i := 0; i < len(t.column_name); i++ {
 		if i == 0 {
 			cmd += t.column_name[i]

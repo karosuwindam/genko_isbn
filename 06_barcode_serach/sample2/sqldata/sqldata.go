@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//SQLの設定ファイル
 type SqlConfig struct {
 	dataSourceName string
 	dbname         string
@@ -240,7 +241,6 @@ func (t *SqlConfig) AddDB(v ...interface{}) int {
 	}
 	time_now := time.Now()
 	cmd := "insert into " + t.tableName + "("
-	// cmd := "insert into " + "blogs" + "("
 	for i := 0; i < len(t.column_name); i++ {
 		if i == 0 {
 			cmd += t.column_name[i]

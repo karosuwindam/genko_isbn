@@ -10,9 +10,9 @@
             function stopbttton(data){
                 
                 if (camch(data)){
-                    // document.getElementById("interactive").style.display = ""
+                    
                 }else{
-                    // document.getElementById("interactive").style.display = "none"
+
                 }
             }
             function output(str,code){
@@ -24,7 +24,7 @@
     <body>
         <div>ISBN検索をする</div>
         <input type="button" value="stop" onclick="stopbttton(this)" style="width: 300px;height: 30px;"><br>
-        <input type="text" name="serch" id="keyword" onkeyup="output(`output`,this.value)">
+        <input type="text" name="serch" id="keyword" ">
         <input type="button" value="clear" onclick="cleardata()" style="height: 30px;">
         <hr>
         <div id="output"></div>

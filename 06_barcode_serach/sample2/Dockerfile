@@ -8,9 +8,9 @@ WORKDIR /app
 COPY . .
 RUN go build -o app
 
-# FROM ubuntu:20.10
-# WORKDIR /app
-# COPY ./config config
-# COPY ./html html
-# COPY ./tmp_html tmp_html
-# COPY --from=builder /app/app ./
+FROM ubuntu:20.10
+WORKDIR /app
+COPY ./config config
+COPY ./html html
+COPY ./tmp_html tmp_html
+COPY --from=builder /app/app ./
